@@ -3,11 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml" 
-        xmlns:local="clr-namespace:PDF_APP"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         mc:Ignorable="d"
         FontFamily="Segoe UI"
-        Height="500" Width="800"
+        Height="600" Width="980"
+        MinHeight="540" MinWidth="860"
         WindowStartupLocation="CenterScreen"
         WindowBackdropType="Mica"
         Background="Transparent"
@@ -21,17 +21,15 @@
 
         <ui:TitleBar Grid.Row="0" Title="" />
 
-        <StackPanel Grid.Row="0" 
-                    Orientation="Horizontal" 
-                    HorizontalAlignment="Left" 
+        <StackPanel Grid.Row="0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Margin="12,0,0,0"
                     IsHitTestVisible="False">
-
             <Image Source="/icon.ico"
                    Width="20" Height="20"
                    RenderOptions.BitmapScalingMode="HighQuality"/>
-
             <TextBlock Text="PDF Araç Kutusu"
                        FontStyle="Italic"
                        FontSize="12"
@@ -40,54 +38,111 @@
                        Margin="10,0,0,0"/>
         </StackPanel>
 
-        <Grid Grid.Row="1" Margin="20">
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="220"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Border x:Name="MergeSuccessOverlay" Grid.Column="0"
-                Background="#057d15" Margin="3"
-                CornerRadius="8"
-                Opacity="0" 
-                IsHitTestVisible="False"/>
-            <ui:Card Grid.Column="0" 
-                     VerticalAlignment="Stretch"
-                     AllowDrop="True" 
-                     Drop="MergeZone_Drop" 
-                     >
-                <Grid>
-                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <ui:SymbolIcon Symbol="DocumentCopy24" FontSize="50" Margin="0,0,0,10"/>
-                        <TextBlock Text="PDF BİRLEŞTİR" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"/>
-                        <TextBlock Text="Dosyaları sürükle ve bırak" FontSize="12" Opacity="0.6" HorizontalAlignment="Center"/>
+            <Border Grid.Column="0" Background="#12000000" Padding="16,24">
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Top">
+                        <TextBlock Text="ARAÇLAR"
+                                   FontSize="11"
+                                   FontWeight="SemiBold"
+                                   Opacity="0.55"
+                                   Margin="10,0,0,12"/>
+                        <Button x:Name="ConvertButton"
+                                Content="Dönüştür"
+                                HorizontalContentAlignment="Left"
+                                Padding="12,10"
+                                Margin="0,0,0,6"
+                                BorderThickness="0"
+                                Background="#220078D4"
+                                Click="ConvertButton_Click"/>
+                        <Button x:Name="MergeButton"
+                                Content="PDF Birleştir"
+                                HorizontalContentAlignment="Left"
+                                Padding="12,10"
+                                Margin="0,0,0,6"
+                                BorderThickness="0"
+                                Background="Transparent"
+                                Click="MergeButton_Click"/>
+                        <Button x:Name="SplitButton"
+                                Content="PDF Parçala"
+                                HorizontalContentAlignment="Left"
+                                Padding="12,10"
+                                BorderThickness="0"
+                                Background="Transparent"
+                                Click="SplitButton_Click"/>
                     </StackPanel>
 
-                    
-                </Grid>
-            </ui:Card>
+                    <TextBlock DockPanel.Dock="Bottom"
+                               Text="Dosyalarını kolayca dönüştür ve düzenle."
+                               TextWrapping="Wrap"
+                               FontSize="12"
+                               Opacity="0.55"
+                               Margin="10,20,10,0"/>
+                </DockPanel>
+            </Border>
 
-            <Border x:Name="SplitSuccessOverlay" Grid.Column="2"
-                Background="#057d15" Margin="3"
-                CornerRadius="8"
-                Opacity="0"
-                IsHitTestVisible="False"/>
-            <ui:Card Grid.Column="2" 
-                     VerticalAlignment="Stretch"
-                     AllowDrop="True" 
-                     Drop="SplitZone_Drop"
-                     >
-                <Grid>
-                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <ui:SymbolIcon Symbol="Cut24" FontSize="50" Margin="0,0,0,10"/>
-                        <TextBlock Text="PDF PARÇALA" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"/>
-                        <TextBlock Text="Tek dosyayı sürükle ve bırak" FontSize="12" Opacity="0.6" HorizontalAlignment="Center"/>
-                    </StackPanel>
+            <Grid Grid.Column="1" Margin="36,28,36,32">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-                    
-                </Grid>
-            </ui:Card>
+                <StackPanel Grid.Row="0" Margin="0,0,0,24">
+                    <TextBlock x:Name="PageTitle"
+                               Text="Dosyaları dönüştür"
+                               FontSize="25"
+                               FontWeight="Bold"/>
+                    <TextBlock x:Name="PageDescription"
+                               Text="JPG, PNG veya DOCX dosyalarını PDF'e çevirin."
+                               FontSize="13"
+                               Opacity="0.65"
+                               Margin="0,6,0,0"/>
+                </StackPanel>
+
+                <Border Grid.Row="1"
+                        x:Name="DropZone"
+                        AllowDrop="True"
+                        Drop="DropZone_Drop"
+                        Background="#080078D4"
+                        BorderBrush="#550078D4"
+                        BorderThickness="1"
+                        CornerRadius="12">
+                    <Grid>
+                        <StackPanel VerticalAlignment="Center"
+                                    HorizontalAlignment="Center">
+                            <ui:SymbolIcon Symbol="DocumentCopy24"
+                                           FontSize="48"
+                                           HorizontalAlignment="Center"
+                                           Margin="0,0,0,16"/>
+                            <TextBlock x:Name="DropTitle"
+                                       Text="Dosyaları buraya sürükleyin"
+                                       FontSize="19"
+                                       FontWeight="SemiBold"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="DropDescription"
+                                       Text="JPG, PNG veya DOCX"
+                                       FontSize="13"
+                                       Opacity="0.6"
+                                       HorizontalAlignment="Center"
+                                       Margin="0,8,0,20"/>
+                            <Button Content="Dosya seç"
+                                    Padding="20,9"
+                                    HorizontalAlignment="Center"
+                                    Click="SelectFiles_Click"/>
+                        </StackPanel>
+                        <Border x:Name="SuccessOverlay"
+                                Background="#88057d15"
+                                CornerRadius="12"
+                                Opacity="0"
+                                IsHitTestVisible="False"/>
+                    </Grid>
+                </Border>
+            </Grid>
         </Grid>
     </Grid>
 </ui:FluentWindow>
